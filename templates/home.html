@@ -1,23 +1,46 @@
+{% extends "head.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html>
-<head lang="ko">
-    <!--==================== META ====================-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="subject" content="밴픽도우미">
-    <meta name="title" content="밴픽도우미">
-    <meta name="author" content="크리스존">
-    <meta name="description" content="밴픽도우미 : 가상밴픽 프로그램">
-    <meta name="keywords" content="밴픽, 롤, 리그오브레전드, 리그 오브 레전드, 밴픽도우미, LCK, 롤드컵, 롤챔스, MCK, LPL, HCK">
-    <meta name="copyright" content="크리스존">
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="밴픽도우미">
-    <meta property="og:description" content="밴픽도우미 : 가상밴픽 프로그램">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'css/reset.css' %}">
-    <title>밴픽도우미</title>
-</head>
+{% block title %}밴픽도우미{% endblock title %}
+{% block body %}
 <body>
-    <div id="main_center">Ban & Pick</div>
+    <div id="home_wrap">
+        <div id="home_logo">
+            <img src="{% static 'img/home_logo.png' %}">
+        </div>
+        <div id="content_wrap">
+        <form method="POST" action="" autocomplete="off">
+        {% csrf_token %}
+        {% for field in forms %}
+            <div class="field_wrap{% if field.label == '내용' %} content{% endif %}{% if field.errors %} error_label{% endif %}">
+                {% if not field.is_hidden %}
+                {{ field.label_tag }}
+                {% endif %}
+                {% if field.errors %}<span class="error">{{ field.errors.0 }}</span>{% endif %}
+                {% if field.help_text %}
+                <div class="help_text">{{ field.help_text }}</div>
+                {% endif %}
+                {{ field }}
+            </div>
+        {% endfor %}
+            <div class="t_center">
+                <input id="draft_submit" class="bold" type="submit" value="시작하기" disabled>
+            </div>
+        </form>
+        </div>
+    </div>
+    <script type="text/javascript">
+    // 시작버튼 activate/deactivate //
+    function submitable(){
+        var inputs = document.getElementsByClassName('draft_input');
+        var submitBtn = document.getElementById('draft_submit');
+        for(var i =0; i < inputs.length; i++){
+            if(!inputs[i].value){
+                submitBtn.disabled = true;
+                return false;
+            }
+        }
+        submitBtn.disabled = false;
+    }
+    </script>
 </body>
-</html>
+{% endblock body %}

@@ -1,0 +1,16 @@
+.f_left{float:left;}
+.f_right{float:right;}
+.center{margin:0 auto;}
+.t_center{text-align:center;}
+.block{display:block;}
+.inline_block{display:inline-block;}
+.inline{display:inline;}
+.bold{font-weight:bold;}
+.pointer{cursor:pointer;}
+.bg_blue{background-color:#0c3897;}
+.bg_black{background-color:#0c0c0c;}
+.bg_red{background-color:#b80000;}
+.after::after{clear:both; visibility:hidden; display:block; content:"";}
+.b_black{border-color:#0c0c0c;}
+.b_blue{border-color:#0c3897;}
+.b_red{border-color:#b80000;}

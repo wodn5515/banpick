@@ -1,0 +1,37 @@
+{% extends "head.html" %}
+{% load static %}
+{% block title %}{{draft.match_name}} 입장 | 밴픽 도우미{% endblock title %}
+{% block body %}
+<body>
+    <div id="home_wrap">
+        <div id="home_logo">
+            <img src="{% static 'img/home_logo.png' %}">
+        </div>
+        <div id="entry_wrap">
+        <form method="POST" action="" autocomplete="off">
+            {% csrf_token %}
+            <div id="tc_wrap">
+                <input id="blue_team" type="radio" name="team" value="blue" {% if team == 'blue' %}checked='checked'{% endif %}>
+                <label for="blue_team" class="inline_block blue bold">{{draft.blue_team_name}}</label>
+                <input id="red_team" type="radio" name="team" value="red" {% if team == 'red' %}checked='checked'{% endif %}>
+                <label for="red_team" class="inline_block red bold">{{draft.red_team_name}}</label>
+                <input id="spectator" type="radio" name="team" value="none" {% if team == 'spectator' %}checked='checked'{% endif %}>
+                <label for="spectator" class="block black bold">관 전</label>
+            </div>
+            <div id="password_wrap" class="after">
+                <label for="pw_input" class="inline_block f_left bold">비밀번호</label>
+                <input id="pw_input" name="password" class="inline_block f_left" type="password">
+            </div>
+            <input id="entry_btn" class="bold" type="submit" value="입장하기">
+        </form>
+        </div>
+    </div>
+    {% if messages %}
+    <script type="text/javascript">
+    {% for message in messages%}
+    alert('{{message}}')
+    {% endfor %}
+    </script>
+    {% endif %}
+</body>
+{% endblock body %}

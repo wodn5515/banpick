@@ -1,0 +1,54 @@
+{% extends "head.html" %}
+{% load static %}
+{% block title %}밴픽 도우미{% endblock title %}
+{% block body %}
+<body>
+    <div id="home_wrap">
+        <div id="home_logo">
+            <img src="{% static 'img/home_logo.png' %}">
+        </div>
+        <div id="result_wrap">
+            <div class="container after">
+                <div class="link f_left">
+                    <a class="bold" target="_blank" href="{{draft.entry_url}}">
+                        <input id="draft_url" class="t_center" value="127.0.0.1:8000{{draft.entry_url}}" readonly>
+                    </a>
+                </div>
+                <div class="copy f_left">
+                    <img src="{% static 'img/copy-32.png' %}" width='50px' onclick="CopyDraftUrl()">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+    // 주소 복사하기
+    function CopyDraftUrl(){
+        var url = document.getElementById("draft_url");
+        url.select();
+        document.execCommand("copy");
+        AlertStr("복사완료")
+    }
+    // 알림창 띄우기
+    function AlertStr(msg){
+        var parentNode = document.getElementById('home_wrap');
+        var html = '<div class="alert_wrap bold">' + msg + '</div>'
+        parentNode.innerHTML = parentNode.innerHTML + html;
+        clearTimeout(disappearFunc);
+        clearTimeout(removeFunc);
+        var el = document.getElementsByClassName('alert_wrap');
+        var disappearFunc = setTimeout(function(){
+            for(var i=0, len=el.length; i<len; i++){
+                el[i].classList.add('disappear');
+            };
+        }, 400)
+        var removeFunc = setTimeout(function(){
+            for(var i=0, len=el.length; i<len; i++){
+                el[i].parentNode.removeChild(el[i]);
+            }
+        }, 1400)
+        disappearFunc;
+        removeFunc;
+    }
+    </script>
+</body>
+{% endblock body %}

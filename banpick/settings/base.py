@@ -27,6 +27,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'channels',
     'chat',
+    'draft.apps.DraftConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -64,6 +65,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'banpick.wsgi.application'
+
 # Channels
 ASGI_APPLICATION = 'banpick.routing.application'
 CHANNEL_LAYERS = {
@@ -75,6 +77,9 @@ CHANNEL_LAYERS = {
     },
 }
 
+# Session
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_SAVE_EVERY_REQUEST = True
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
