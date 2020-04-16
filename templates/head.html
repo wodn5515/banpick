@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head lang="ko">
+    {% block meta %}
+    <!--====================== META ======================-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="subject" content="밴픽도우미">
+    <meta name="title" content="밴픽도우미">
+    <meta name="author" content="크리스존">
+    <meta name="description" content="밴픽도우미 : 가상밴픽 프로그램">
+    <meta name="keywords" content="밴픽, 롤, 리그오브레전드, 리그 오브 레전드, 밴픽도우미, LCK, 롤드컵, 롤챔스, MCK, LPL, HCK">
+    <meta name="copyright" content="크리스존">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="밴픽도우미">
+    <meta property="og:description" content="밴픽도우미 : 가상밴픽 프로그램">
+    <!--==================================================-->
+    {% endblock meta %}
+    {% block headjs %}
+    <!--==================== CSS & JS ====================-->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/reset.css' %}">
+    <link rel="stylesheet" href="{% static 'css/common.css' %}">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://unpkg.com/vue@2.5.13/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!--==================================================-->
+    {% endblock headjs %}
+    <title>{% block title %}{% endblock title %}</title>
+</head>
+{% block body %}{% endblock body %}
+</html>
