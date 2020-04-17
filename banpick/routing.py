@@ -11,3 +11,5 @@ application = ProtocolTypeRouter({
         re_path(r'ws/draft/(?P<room_id>\w+)/$', draft_consumers.DraftConsumer)
     ])
 })
+
+ASGI_APPLICATION = "banpick.routing.application"
