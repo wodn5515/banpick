@@ -152,7 +152,7 @@
 
     var draftSocket = new WebSocket(
         'ws://' + window.location.host + 
-        ':6379/ws/draft/' + roomId + '/');
+        '/ws/draft/' + roomId + '/');
 
     var draft = new Vue({
         el:"#app",
