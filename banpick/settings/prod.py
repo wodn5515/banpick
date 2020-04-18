@@ -13,3 +13,12 @@ ALLOWED_HOSTS = ["*"]
 DATABASES = {
     'default':SETTINGS_PROD_DIC['DATABASES']['default']
 }
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('172.31.34.28', 6379)],
+        },
+    },
+}
