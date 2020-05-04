@@ -11,14 +11,11 @@
         <form method="POST" action="" autocomplete="off">
         {% csrf_token %}
         {% for field in forms %}
-            <div class="field_wrap{% if field.label == '내용' %} content{% endif %}{% if field.errors %} error_label{% endif %}">
-                {% if not field.is_hidden %}
+            <div id="{{field.name}}" class="field_wrap{% if field.errors %} error_label{% endif %}">
                 {{ field.label_tag }}
-                {% endif %}
                 {% if field.errors %}<span class="error">{{ field.errors.0 }}</span>{% endif %}
-                {% if field.help_text %}
-                <div class="help_text">{{ field.help_text }}</div>
-                {% endif %}
+                {% if field.help_text %}{{ field.help_text|safe }}{% endif %}
+                {% if field.check %}<div>asd</div>{% endif %}
                 {{ field }}
             </div>
         {% endfor %}
@@ -31,15 +28,34 @@
     <script type="text/javascript">
     // 시작버튼 activate/deactivate //
     function submitable(){
-        var inputs = document.getElementsByClassName('draft_input');
-        var submitBtn = document.getElementById('draft_submit');
-        for(var i =0; i < inputs.length; i++){
+        const inputs = document.getElementsByClassName('draft_input');
+        const submitBtn = document.getElementById('draft_submit');
+        for(let i =0; i < inputs.length; i++){
             if(!inputs[i].value){
                 submitBtn.disabled = true;
                 return false;
             }
         }
         submitBtn.disabled = false;
+    }
+    // 플레이어 입력하기 onChange //
+    function playerCheck(event){
+        const el = event.currentTarget.parentNode.parentNode;
+        const team = event.currentTarget.className;
+        console.log(document.getElementById(team + '_player_name'))
+        if(document.getElementById(team + '_player_name')){
+            document.getElementById(team + '_player_name').remove();
+            el.classList.remove('player_on');
+        }else{
+            let html = '<div id="' + team + '_player_name" class="player_wrap ' + team + '">\
+                    <div class="container"><label for="' + team + '_player_top">탑</label><input type="text" name="' + team + '_player_top" class="bold draft_player_input" id="' + team + '_player_top"><span class="bar"></span></div>\
+                    <div class="container"><label for="' + team + '_player_jg">정글</label><input type="text" name="' + team + '_player_jg" class="bold draft_player_input" id="' + team + '_player_jg"><span class="bar"></span></div>\
+                    <div class="container"><label for="' + team + '_player_mid">미드</label><input type="text" name="' + team + '_player_mid" class="bold draft_player_input" id="' + team + '_player_mid"><span class="bar"></span></div>\
+                    <div class="container"><label for="' + team + '_player_adc">원딜</label><input type="text" name="' + team + '_player_adc" class="bold draft_player_input" id="' + team + '_player_adc"><span class="bar"></span></div>\
+                    <div class="container"><label for="' + team + '_player_sup">서포터</label><input type="text" name="' + team + '_player_sup" class="bold draft_player_input" id="' + team + '_player_sup"><span class="bar"></span></div></div>'
+            el.insertAdjacentHTML('afterend', html);
+            el.classList.add('player_on');
+        }
     }
     </script>
 </body>
