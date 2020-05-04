@@ -1,5 +1,6 @@
 {% extends "head.html" %}
 {% load static %}
+{% load champion_tag %}
 {% block title %}{{draft.match_name}} | 밴픽 도우미{% endblock title %}
 {% block body %}
 <body>
@@ -9,11 +10,11 @@
         </div>
         <div id="timer_wrap" class="t_center bold">
             <div class="turn blue">
-                <p>{{draft.blue_team_name}}</p><div class="bar"></div>
+                <p>{{draft.blue_team_name}} TEAM</p><div class="bar"></div>
             </div>
-            <div id="timer">[[timer | timerShow]]</div>
+            <div id="timer">[[timer|timerDp]]</div>
             <div class="turn red">
-                <p>{{draft.red_team_name}}</p><div class="bar"></div>
+                <p>{{draft.red_team_name}} TEAM</p><div class="bar"></div>
             </div>                    
         </div>
         <div id="room_wrap">
@@ -22,44 +23,59 @@
                     <div class="ban">
                         <div class="container od_0">
                             <div class="sp"></div>
+                            <p class="order"></p>
                             <span class="bar"></span>
                         </div>
                         <div class="container od_2">
                             <div class="sp"></div>
+                            <p class="order"></p>
                             <span class="bar"></span>
                         </div>
                         <div class="container od_4">
                             <div class="sp"></div>
+                            <p class="order"></p>
                             <span class="bar"></span>
                         </div>
                         <div class="container od_13">
                             <div class="sp"></div>
+                            <p class="order"></p>
                             <span class="bar"></span>
                         </div>
                         <div class="container od_15">
                             <div class="sp"></div>
+                            <p class="order"></p>
                             <span class="bar"></span>
                         </div>
                     </div>
                     <div class="pick">
                         <div class="container od_6">
                             <div class="sp"></div>
+                            <p class="name">{% player_name draft.blue_player_name '0' %}</p>
+                            <p class="order"></p>
                             <span class="bar"></span>
                         </div>
                         <div class="container od_9">
                             <div class="sp"></div>
+                            <p class="name">{% player_name draft.blue_player_name '1' %}</p>
+                            <p class="order"></p>
                             <span class="bar"></span>
                         </div>
                         <div class="container od_10">
                             <div class="sp"></div>
+                            <p class="name">{% player_name draft.blue_player_name '2' %}</p>
+                            <p class="order"></p>
                             <span class="bar"></span>
                         </div>
                         <div class="container od_17">
                             <div class="sp"></div>
+                            <p class="name">{% player_name draft.blue_player_name '3' %}</p>
+                            <p class="order"></p>
                             <span class="bar"></span>
                         </div>
                         <div class="container od_18">
                             <div class="sp"></div>
+                            <p class="name">{% player_name draft.blue_player_name '4' %}</p>
+                            <p class="order"></p>
                             <span class="bar"></span>
                         </div>
                     </div>
@@ -82,7 +98,7 @@
                     <input id="cpf-search" type="text" @keyup="championsRefresh()" name="name">
                 </div>
                 <div id="champion_list" class="after bg_black">
-                    <div v-for="champion in champions" class="champion f_left">
+                    <div v-for="champion in championsList" class="champion f_left">
                         <i @click="draftSelect(champion.no)" :style="champion.no|cpStyle" class="block sp" :class="champion.no|cpClassName" :disabled="champion.disabled">
                             <div class="sp-name t_center">
                                 <p class="inline-block">[[champion.name]]</p>
@@ -99,44 +115,59 @@
                     <div class="ban">
                         <div class="container od_1">
                             <div class="sp"></div>
+                            <p class="order"></p>
                             <span class="bar"></span>
                         </div>
                         <div class="container od_3">
                             <div class="sp"></div>
+                            <p class="order"></p>
                             <span class="bar"></span>
                         </div>
                         <div class="container od_5">
                             <div class="sp"></div>
+                            <p class="order"></p>
                             <span class="bar"></span>
                         </div>
                         <div class="container od_12">
                             <div class="sp"></div>
+                            <p class="order"></p>
                             <span class="bar"></span>
                         </div>
                         <div class="container od_14">
                             <div class="sp"></div>
+                            <p class="order"></p>
                             <span class="bar"></span>
                         </div>
                     </div>
                     <div class="pick">
                         <div class="container od_7">
                             <div class="sp"></div>
+                            <p class="name">{% player_name draft.red_player_name '0' %}</p>
+                            <p class="order"></p>
                             <span class="bar"></span>
                         </div>
                         <div class="container od_8">
                             <div class="sp"></div>
+                            <p class="name">{% player_name draft.red_player_name '1' %}</p>
+                            <p class="order"></p>
                             <span class="bar"></span>
                         </div>
                         <div class="container od_11">
                             <div class="sp"></div>
+                            <p class="name">{% player_name draft.red_player_name '2' %}</p>
+                            <p class="order"></p>
                             <span class="bar"></span>
                         </div>
                         <div class="container od_16">
                             <div class="sp"></div>
+                            <p class="name">{% player_name draft.red_player_name '3' %}</p>
+                            <p class="order"></p>
                             <span class="bar"></span>
                         </div>
                         <div class="container od_19">
                             <div class="sp"></div>
+                            <p class="name">{% player_name draft.red_player_name '4' %}</p>
+                            <p class="order"></p>
                             <span class="bar"></span>
                         </div>
                     </div>
@@ -148,17 +179,18 @@
         </div>
     </div>
     <script>
-    var roomId = "{{ draft.id|escapejs }}";
+    const roomId = "{{ draft.id|escapejs }}";
 
-    var draftSocket = new WebSocket(
+    const draftSocket = new WebSocket(
         'ws://' + window.location.host + 
         '/ws/draft/' + roomId + '/');
 
-    var draft = new Vue({
+    const draft = new Vue({
         el:"#app",
         delimiters:['[[',']]'],
         data:{
             timer:0,
+            timerF:null,
             start:false,
             order:0,
             draft:{
@@ -166,40 +198,46 @@
                 temp:'',
                 team:'blue'
             },
-            champions:''
+            championsList:'',
+            championsValid:[]
         },
         watch: {
             {% if request.session.master == draft.id %}
             timer:function(newTimer, oldTimer){
-                if(this.start && parseInt(newTimer/28) == 1 && newTimer % 28 == 0){
-                    this.draft.temp = Math.floor(Math.random() * 147) + 1
-                    this.draftChoice();
-                }
+                if(this.start && newTimer == 29){
+                    const self = this;
+                    if([0,1,2,3,4,5,12,13,14,15].includes(self.order)){
+                        self.draft.temp = '999'
+                    }else{
+                        self.draft.temp = randomArray(self.championsValid);
+                    }
+                    self.draftChoice();
+                };
             },
             {% endif %}
             order:function(newOrder, oldOrder){
-                var blue = [0, 2, 4, 6, 9, 10, 13, 15, 17, 18]
+                const blue = [0, 2, 4, 6, 9, 10, 13, 15, 17, 18];
                 if(blue.includes(newOrder)){
-                    this.draft.team = 'blue'
+                    this.draft.team = 'blue';
                 }else{
-                    this.draft.team = 'red'
-                }
+                    this.draft.team = 'red';
+                };
             }
         },
         filters:{
-            timerShow:function(time){
-                return 27 - (time % 28)
+            timerDp(timer){
+                return (timer / 28 < 1) ? 27-(timer % 28) : 0;
             },
-            selectClassName:function(order){
-                return ([0,1,2,3,4,5,12,13,14,15].includes(order)) ? 'ban' : 'pick'
+            selectClassName(order){
+                return ([0,1,2,3,4,5,12,13,14,15].includes(order)) ? 'ban' : 'pick';
             },
-            selectHtml:function(order){
-                return ([0,1,2,3,4,5,12,13,14,15].includes(order)) ? '금지하기' : '선택하기'
+            selectHtml(order){
+                return ([0,1,2,3,4,5,12,13,14,15].includes(order)) ? '금지하기' : '선택하기';
             },
-            cpClassName:function(no){
-                return 'sp-' + no
+            cpClassName(no){
+                return 'sp-' + no;
             },
-            cpStyle:function(no){
+            cpStyle(no){
                 return "backgroundPosition:0px -" + String(Number(no)*82) + "px;";
             }
         },
@@ -208,63 +246,79 @@
             this.championsRefresh();
         },
         methods:{
-            draftStart:function(){
-                var self = this;
+            draftStart(){
+                const self = this;
                 axios.post('/draft/draft/{{draft.id}}', {no:''}, {xsrfCookieName: 'csrftoken', xsrfHeaderName: 'X-CSRFToken'})
                 .then(function(response){
                     self.draftRefresh();
                     self.championsRefresh();
-                    self.countDownTimer()
+                    self.start = true;
                 })
             },
-            championsRefresh:function(){
-                var self = this;
-                var lane = (document.querySelector("input[name='lane']:checked")) ? document.querySelector("input[name='lane']:checked").value : '';
-                var name = document.querySelector("input[name='name']") ? document.querySelector("input[name='name']").value : '';
-                var draft = '{{draft.id}}'
+            championsRefresh(){
+                const self = this;
+                const lane = (document.querySelector("input[name='lane']:checked")) ? document.querySelector("input[name='lane']:checked").value : '';
+                const name = document.querySelector("input[name='name']") ? document.querySelector("input[name='name']").value : '';
+                const draft = '{{draft.id}}';
                 axios.get('/draft/champion?lane=' + lane + '&name=' + name + '&draft=' + draft)
                 .then(function(response){
-                    self.champions = response.data;
+                    self.championsList = response.data;
                 })
             },
-            draftRefresh:function(){
-                var self = this;
-                var now = Math.floor(Date.now()/1000)
-                console.log(now)
+            draftRefresh(){
+                const self = this;
+                const now = Math.floor(Date.now()/1000)
                 axios.get('/draft/draft/{{draft.id}}')
                 .then(function(response){
-                    if(response.data.start){
-                        self.timer = now-response.data.start;
+                    {% if request.session.master == draft.id %}if(response.data.timer){
+                        self.timer = now - response.data.timer;
+                        self.countDownTimer();
                         self.start = true;
-                    };
-                    if(self.timer > 0){
-                        self.countDownTimer()
-                    }
+                    }{% endif %}
+                    self.championsValid = response.data.champions_valid
                     if(response.data.banpick != [""]){
                         banpick = response.data.banpick.split('/');
                         self.draft.banpick = banpick;
                         self.order = banpick.length;
-                        for(var i = 0; i < banpick.length; i++){
-                            var el = document.querySelector('.od_' + String(i) + ' .sp');
-                            el.style.backgroundImage = 'url(/assets/img/champion82.png)';
-                            el.style.backgroundPosition = '0px -' + String(banpick[i] * 52) + 'px';
+                        for(let i = 0; i < banpick.length; i++){
+                            const el = document.querySelector('.od_' + String(i) + ' .sp');
+                            if([6,7,8,9,10,11,16,17,18,19].includes(i)){
+                                el.style.backgroundImage = 'url(/assets/img/champion82.png)';
+                                el.style.backgroundPosition = '0px -' + String(banpick[i] * 82) + 'px';
+                            }else{
+                                if(banpick[i] == '999'){
+                                    el.style.backgroundImage = 'radial-gradient(black, #555555)'
+                                    el.style.backgroundSize = '100% 100%'
+                                }else{
+                                    el.style.backgroundImage = 'url(/assets/img/champion82.png)';
+                                    el.style.backgroundPosition = '0px -' + String(banpick[i] * 52) + 'px';
+                                }
+                            }
                         };
                     };
                     if(document.querySelector('.team .container.now')){
+                        document.querySelector('.team .container.now .order').innerHTML = '';
                         document.querySelector('.team .container.now').classList.remove('now');
                     }
-                    document.querySelector('.od_' + self.order).classList.add('now');
                     if(document.querySelector('.team .container.next')){
+                        document.querySelector('.team .container.next .order').innerHTML = '';
                         document.querySelector('.team .container.next').classList.remove('next');
                     }
-                    document.querySelector('.od_' + String(self.order+1)).classList.add('next');
+                    if(self.order < 20){
+                        document.querySelector('.od_' + self.order).classList.add('now');
+                        document.querySelector('.od_' + self.order + ' .order').innerHTML = '선택중...'
+                    }
+                    if(self.order < 19){
+                        document.querySelector('.od_' + String(self.order+1)).classList.add('next');
+                        document.querySelector('.od_' + String(self.order+1) + ' .order').innerHTML = '다음 차례에 선택'
+                    }
+                    if(self.order >= 20){
+                        clearInterval(self.timerF);
+                        self.timer = 30;
+                    }
                 })
             },
-            timerStart:function(){
-                if(this.timer > 0){
-                };
-            },
-            draftSelect:function(no){
+            draftSelect(no){
                 el2 = document.querySelector('.sp-' + String(no));
                 if(el2.hasAttribute('disabled')){
                     return false;
@@ -274,20 +328,21 @@
                 if(el1){
                     el1.classList.remove('selected')
                 }
-                el2.classList.add('selected')
+                el2.classList.add('selected');
+                if([6,7,8,9,10,11,16,17,18,19].includes(this.order) && this.draft.team == '{{ request.session.team }}'){
+                    draftSocket.send(JSON.stringify({'message': 'championselect|' + this.order + ',' + String(no)}))
+                }
             },
-            draftChoice:function(){
-                var self = this;
-                var order = this.order;
-                var no = this.draft.temp;
+            draftChoice(){
+                const self = this;
+                const order = this.order;
+                const no = this.draft.temp;
                 if(no){
-                    var postData = {no: no};
+                    const postData = {no,};
                     axios.post('/draft/draft/{{draft.id}}', postData, {xsrfCookieName: 'csrftoken', xsrfHeaderName: 'X-CSRFToken'})
                     .then(function(response){
-                        self.draftRefresh();
+                        draftSocket.send(JSON.stringify({'message': 'draftrefresh|'}));
                         el = document.querySelector('.sp-' + no);
-                        el.classList.remove('selected');
-                        el.setAttribute("disabled", "disabled");
                         self.order++;
                         if(document.querySelector("input[name='name']").value){
                             document.querySelector("input[name='name']").value == '';
@@ -295,31 +350,47 @@
                         if(document.querySelector("input[name='lane']:checked")){
                             document.querySelector("input[name='lane']:checked").checked = false;
                         }
-                        self.championsRefresh();
+                        draftSocket.send(JSON.stringify({'message': 'championsrefresh|'}));
+                        self.draft.temp = '';
                     })
                 }
             },
-            countDown:function(){
-                this.timer += 1;
-            },
-            countDownTimer:function(){
-                setInterval(this.countDown, 1000)
-            },
-            test:function(){
+            countDown(){
+                timer = this.timer + 1
                 draftSocket.send(JSON.stringify({
-                'message': 'asd'
-                }));
-            }
+                    'message':'timer|'+ String(timer)
+                }))
+            },
+            countDownTimer(){
+                if(this.timerF){
+                    return false;
+                }else{
+                    this.timerF = setInterval(this.countDown, 1000)
+                }
+            },
         }
     })
-    draftSocket.onopen = function (e) {
-      console.log("연결 성공");
-    };
 
     draftSocket.onmessage = function(e) {
-        var data = JSON.parse(e.data);
-        var message = data['message'];
-        console.log(message)
+        const data = JSON.parse(e.data);
+        const message = data['message'].split('|');
+        const msgType = message[0];
+        const msgData = message[1]
+        if(msgType=='timer'){
+            draft.timer = Number(msgData);
+        }
+        if(msgType=='draftrefresh'){
+            draft.draftRefresh();
+        }
+        if(msgType=='championsrefresh'){
+            draft.championsRefresh();
+        }
+        if(msgType=='championselect'){
+            const order = msgData.split(',')[0]
+            const no = msgData.split(',')[1]
+            document.querySelector('.od_' + order + ' .sp').style.backgroundImage = 'url(/assets/img/champion82.png)';
+            document.querySelector('.od_' + order + ' .sp').style.backgroundPosition = '0px -' + String(Number(no) * 82) + 'px';
+        }
     };
     </script>
 </body>

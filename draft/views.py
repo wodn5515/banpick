@@ -65,18 +65,25 @@ def draft_draft(request, room_id):
     if request.method == "POST":
         data = json.loads(request.body.decode("utf-8"))
         no = data['no']
-        if draft.banpick:
-            draft.banpick += '/'+str(no)
-        else:
-            draft.banpick += str(no)
+        if no:
+            if draft.banpick:
+                draft.banpick += '/'+str(no)
+            else:
+                draft.banpick += str(no)
         draft.timer = datetime.datetime.now()
         draft.save()
         return HttpResponse('success')
     else:
         data = {}
-        data['banpick'] = draft.banpick
+        if draft.banpick:
+            cp_list = list(range(0,148))
+            for i in draft.banpick.split('/'):
+                if i != '999':
+                    cp_list.remove(int(i))
+            data['champions_valid'] = cp_list
+            data['banpick'] = draft.banpick
         if draft.timer:
-            data['start'] = int(draft.timer.timestamp())
+            data['timer'] = int(draft.timer.timestamp())
         return JsonResponse(data, safe=False)
 
 
@@ -88,7 +95,7 @@ def draft_champion(request):
     banpick = Draft.objects.get(pk=draft).banpick.split('/')
     champions = Champion.objects.all().order_by('name')
     if name != '':
-        champions = champions.filter(name__contains=name).order_by('name')
+        champions = champions.filter(keyword__contains=name).order_by('name')
     if lane != '':
         champions = champions.filter(lane=lane).order_by('name')
     for i in champions:
@@ -99,3 +106,10 @@ def draft_champion(request):
             temp['disabled'] = True
         cp_list.append(temp)
     return JsonResponse(data=cp_list, safe=False)
+
+def draft_timer(request, room_id):
+    draft = Draft.objects.get(pk=room_id)
+    if request.session.get('master','') == room_id:
+        return JsonResponse({'asd':'asd'})
+    else:
+        return JsonResponse({'asd':'qwe'})
