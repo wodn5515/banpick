@@ -250,9 +250,8 @@
                 const self = this;
                 axios.post('/draft/draft/{{draft.id}}', {no:''}, {xsrfCookieName: 'csrftoken', xsrfHeaderName: 'X-CSRFToken'})
                 .then(function(response){
-                    self.draftRefresh();
-                    self.championsRefresh();
-                    self.start = true;
+                    draftSocket.send(JSON.stringify({'message': 'draftrefresh|'}));
+                    draftSocket.send(JSON.stringify({'message': 'championsrefresh|'}));
                 })
             },
             championsRefresh(){
@@ -270,13 +269,13 @@
                 const now = Math.floor(Date.now()/1000)
                 axios.get('/draft/draft/{{draft.id}}')
                 .then(function(response){
-                    {% if request.session.master == draft.id %}if(response.data.timer){
-                        self.timer = now - response.data.timer;
-                        self.countDownTimer();
+                    if(response.data.timer){
+                        {% if request.session.master == draft.id %}self.timer = now - response.data.timer;
+                        self.countDownTimer();{% endif %}
                         self.start = true;
-                    }{% endif %}
+                    }
                     self.championsValid = response.data.champions_valid
-                    if(response.data.banpick != [""]){
+                    if(response.data.banpick){
                         banpick = response.data.banpick.split('/');
                         self.draft.banpick = banpick;
                         self.order = banpick.length;
