@@ -8,7 +8,7 @@
         <div id="home_logo" class="t_center">
             <img class="block center" src="{% static 'img/home_logo.png' %}">
         </div>
-        <div id="timer_wrap" class="t_center bold">
+        <div id="timer_wrap" class="t_center bold" :class="[order == 21 ? 'end' : '']">
             <div class="turn blue">
                 <p>{{draft.blue_team_name}} TEAM</p><div class="bar"></div>
             </div>
@@ -17,7 +17,7 @@
                 <p>{{draft.red_team_name}} TEAM</p><div class="bar"></div>
             </div>                    
         </div>
-        <div id="room_wrap">
+        <div id="room_wrap" class="after" v-show="order != 20">
             <div id="team_wrap">
                 <div class="team blue">
                     <div class="ban">
@@ -81,7 +81,7 @@
                     </div>
                 </div>
             </div>
-            <div id="draft_wrap">
+            <div id="draft_wrap" v-if="order < 20">
                 <div id="champion_filter">
                     <input id="cpf-all" type="radio" name="lane" @change="championsRefresh()" value="">
                     <label for="cpf-all">전체</label>
@@ -96,6 +96,7 @@
                     <input id="cpf-sup" type="radio" name="lane" @change="championsRefresh()" value="서포터">
                     <label for="cpf-sup">서포터</label>
                     <input id="cpf-search" type="text" @keyup="championsRefresh()" name="name">
+                    <label for="cpf-search" class="f_right">검 색</label>
                 </div>
                 <div id="champion_list" class="after bg_black">
                     <div v-for="champion in championsList" class="champion f_left">
@@ -106,7 +107,7 @@
                         </i>
                     </div>
                 </div>
-                <div id="champion_select" v-if="draft.team == '{{request.session.team}}'" :class="draft.order|selectClassName" @click="draftChoice()">
+                <div id="champion_select" v-if="draft.team == '{{request.session.team}}'" :class="order|selectClassName" @click="draftChoice()">
                     <p class="t_center">[[order|selectHtml]]</p>
                 </div>
             </div>
@@ -173,6 +174,60 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div id="line_wrap" class="{{request.session.team}}" v-show="order == 20">
+            <p>라인 조정</p>
+            {% if  request.session.team == 'blue'%}
+            <div class="{{request.session.team}} lane">
+                <div class="container od_6">
+                    <div class="sp"></div>
+                    <p class="name">{% player_name draft.blue_player_name '0' %}</p>
+                </div>
+                <div class="container od_9">
+                    <div class="sp"></div>
+                    <p class="name">{% player_name draft.blue_player_name '1' %}</p>
+                </div>
+                <div class="container od_10">
+                    <div class="sp"></div>
+                    <p class="name">{% player_name draft.blue_player_name '2' %}</p>
+                </div>
+                <div class="container od_17">
+                    <div class="sp"></div>
+                    <p class="name">{% player_name draft.blue_player_name '3' %}</p>
+                </div>
+                <div class="container od_18">
+                    <div class="sp"></div>
+                    <p class="name">{% player_name draft.blue_player_name '4' %}</p>
+                </div>
+            </div>
+            {% elif request.session.team == 'red' %}
+            <div class="{{request.session.team}} lane">
+                <div class="container od_7">
+                    <div class="sp"></div>
+                    <p class="name">{% player_name draft.red_player_name '0' %}</p>
+                </div>
+                <div class="container od_8">
+                    <div class="sp"></div>
+                    <p class="name">{% player_name draft.red_player_name '1' %}</p>
+                </div>
+                <div class="container od_11">
+                    <div class="sp"></div>
+                    <p class="name">{% player_name draft.red_player_name '2' %}</p>
+                </div>
+                <div class="container od_16">
+                    <div class="sp"></div>
+                    <p class="name">{% player_name draft.red_player_name '3' %}</p>
+                </div>
+                <div class="container od_19">
+                    <div class="sp"></div>
+                    <p class="name">{% player_name draft.red_player_name '4' %}</p>
+                </div>
+            </div>
+            {% else %}
+            <div id="spectator_wait" class="{{request.session.team}} team">
+                라인 조정중...
+            </div>
+            {% endif  %}
         </div>
         <div id="modal" v-if="!start">
             <div id="start_wrap"{% if request.session.master == draft.id %} @click="draftStart">시작하기{% else %}>대기중 ...{% endif %}</div>
@@ -250,8 +305,8 @@
                 const self = this;
                 axios.post('/draft/draft/{{draft.id}}', {no:''}, {xsrfCookieName: 'csrftoken', xsrfHeaderName: 'X-CSRFToken'})
                 .then(function(response){
-                    draftSocket.send(JSON.stringify({'message': 'draftrefresh|'}));
                     draftSocket.send(JSON.stringify({'message': 'championsrefresh|'}));
+                    draftSocket.send(JSON.stringify({'message': 'draftrefresh|'}));
                 })
             },
             championsRefresh(){
@@ -280,7 +335,7 @@
                         self.draft.banpick = banpick;
                         self.order = banpick.length;
                         for(let i = 0; i < banpick.length; i++){
-                            const el = document.querySelector('.od_' + String(i) + ' .sp');
+                            const el = document.querySelector('#team_wrap .od_' + String(i) + ' .sp');
                             if([6,7,8,9,10,11,16,17,18,19].includes(i)){
                                 el.style.backgroundImage = 'url(/assets/img/champion82.png)';
                                 el.style.backgroundPosition = '0px -' + String(banpick[i] * 82) + 'px';
@@ -289,8 +344,13 @@
                                     el.style.backgroundImage = 'radial-gradient(black, #555555)'
                                     el.style.backgroundSize = '100% 100%'
                                 }else{
-                                    el.style.backgroundImage = 'url(/assets/img/champion82.png)';
-                                    el.style.backgroundPosition = '0px -' + String(banpick[i] * 52) + 'px';
+                                    if(self.order == 21){
+                                        el.style.backgroundImage = 'url(/assets/img/champion82.png)';
+                                        el.style.backgroundPosition = '0px -' + String(banpick[i] * 82) + 'px';
+                                    }else{
+                                        el.style.backgroundImage = 'url(/assets/img/champion82.png)';
+                                        el.style.backgroundPosition = '0px -' + String(banpick[i] * 52) + 'px';
+                                    }
                                 }
                             }
                         };
@@ -311,9 +371,13 @@
                         document.querySelector('.od_' + String(self.order+1)).classList.add('next');
                         document.querySelector('.od_' + String(self.order+1) + ' .order').innerHTML = '다음 차례에 선택'
                     }
-                    if(self.order >= 20){
+                    if(self.order == 20){
                         clearInterval(self.timerF);
                         self.timer = 30;
+                        self.laneChoice();
+                    }
+                    if(self.order == 21){
+                        self.draftEnd();
                     }
                 })
             },
@@ -353,6 +417,21 @@
                         self.draft.temp = '';
                     })
                 }
+            },
+            laneChoice(){
+                {% if request.session.team == 'none' %}{% else %}
+                const el_array = document.querySelectorAll('.lane .container')
+                for(let i = 0; i < 5; i++){
+                    const order = el_array[i].className.split('_')[1];
+                    const pick = this.draft.banpick[order];
+                    const el_sp = document.querySelector('.lane .od_' + order + ' .sp');
+                    el_sp.style.backgroundImage = 'url(/assets/img/champion82.png)';
+                    el_sp.style.backgroundPosition = '0px -' + String(pick * 82) + 'px';
+                }
+                {% endif %}
+            },
+            draftEnd(){
+                alert('end')
             },
             countDown(){
                 timer = this.timer + 1

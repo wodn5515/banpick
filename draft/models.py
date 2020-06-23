@@ -37,6 +37,10 @@ class Draft(models.Model):
         verbose_name='밴픽Data', max_length=255, blank=True
     )
 
+    banpick_final = models.CharField(
+        verbose_name='밴픽최종', max_length=255, blank=True, default=""
+    )
+
     timer = models.DateTimeField(
         verbose_name="시작", blank=True, null=True
     )
