@@ -17,7 +17,7 @@
                 <p>{{draft.red_team_name}} TEAM</p><div class="bar"></div>
             </div>                    
         </div>
-        <div id="room_wrap" class="after" v-show="order != 20">
+        <div id="room_wrap" class="after" v-show="order != 20" :class="[order == 21 ? 'end' : '']">
             <div id="team_wrap">
                 <div class="team blue">
                     <div class="ban">
@@ -81,7 +81,7 @@
                     </div>
                 </div>
             </div>
-            <div id="draft_wrap" v-if="order < 20">
+            <div id="draft_wrap" v-show="order < 20">
                 <div id="champion_filter">
                     <input id="cpf-all" type="radio" name="lane" @change="championsRefresh()" value="">
                     <label for="cpf-all">전체</label>
@@ -176,53 +176,121 @@
             </div>
         </div>
         <div id="line_wrap" class="{{request.session.team}}" v-show="order == 20">
-            <p>라인 조정</p>
+            <p>라인 선택</p>
             {% if  request.session.team == 'blue'%}
-            <div class="{{request.session.team}} lane">
-                <div class="container od_6">
-                    <div class="sp"></div>
-                    <p class="name">{% player_name draft.blue_player_name '0' %}</p>
+            <div v-show="!laneBlue">
+                <div class="{{request.session.team}} lane">
+                    <div class="container od_6">
+                        <div class="sp"></div>
+                        <div class="laneicon_wrap">
+                            {% for i in '01234'|make_list %}
+                            <input id="b0-{{i}}" name="b0" value={{i}} type="radio">
+                            <label for="b0-{{i}}" class="icon-{{i}}"></label>
+                            {% endfor %}
+                        </div>
+                        <p class="name">{% player_name draft.blue_player_name '0' %}</p>
+                    </div>
+                    <div class="container od_9">
+                        <div class="sp"></div>
+                        <div class="laneicon_wrap">
+                            {% for i in '01234'|make_list %}
+                            <input id="b1-{{i}}" name="b1" value={{i}} type="radio">
+                            <label for="b1-{{i}}" class="icon-{{i}}"></label>
+                            {% endfor %}
+                        </div>
+                        <p class="name">{% player_name draft.blue_player_name '1' %}</p>
+                    </div>
+                    <div class="container od_10">
+                        <div class="sp"></div>
+                        <div class="laneicon_wrap">
+                            {% for i in '01234'|make_list %}
+                            <input id="b2-{{i}}" name="b2" value={{i}} type="radio">
+                            <label for="b2-{{i}}"class="icon-{{i}}"></label>
+                            {% endfor %}
+                        </div>
+                        <p class="name">{% player_name draft.blue_player_name '2' %}</p>
+                    </div>
+                    <div class="container od_17">
+                        <div class="sp"></div>
+                        <div class="laneicon_wrap">
+                            {% for i in '01234'|make_list %}
+                            <input id="b3-{{i}}" name="b3" value={{i}} type="radio">
+                            <label for="b3-{{i}}"class="icon-{{i}}"></label>
+                            {% endfor %}
+                        </div>
+                        <p class="name">{% player_name draft.blue_player_name '3' %}</p>
+                    </div>
+                    <div class="container od_18">
+                        <div class="sp"></div>
+                        <div class="laneicon_wrap">
+                            {% for i in '01234'|make_list %}
+                            <input id="b4-{{i}}" name="b4" value={{i}} type="radio">
+                            <label for="b4-{{i}}" class="icon-{{i}}"></label>
+                            {% endfor %}
+                        </div>
+                        <p class="name">{% player_name draft.blue_player_name '4' %}</p>
+                    </div>
                 </div>
-                <div class="container od_9">
-                    <div class="sp"></div>
-                    <p class="name">{% player_name draft.blue_player_name '1' %}</p>
-                </div>
-                <div class="container od_10">
-                    <div class="sp"></div>
-                    <p class="name">{% player_name draft.blue_player_name '2' %}</p>
-                </div>
-                <div class="container od_17">
-                    <div class="sp"></div>
-                    <p class="name">{% player_name draft.blue_player_name '3' %}</p>
-                </div>
-                <div class="container od_18">
-                    <div class="sp"></div>
-                    <p class="name">{% player_name draft.blue_player_name '4' %}</p>
-                </div>
+                <div @click="laneChoiceDone('blue')" id="lc_done">선택완료</div>
             </div>
+            <div v-if="laneBlue" class="lane_wait">상대팀 선택중...</div>
             {% elif request.session.team == 'red' %}
-            <div class="{{request.session.team}} lane">
-                <div class="container od_7">
-                    <div class="sp"></div>
-                    <p class="name">{% player_name draft.red_player_name '0' %}</p>
+            <div v-show="!laneRed">
+                <div class="{{request.session.team}} lane">
+                    <div class="container od_7">
+                        <div class="sp"></div>
+                        <div class="laneicon_wrap">
+                            {% for i in '01234'|make_list %}
+                            <input id="r0-{{i}}" name="r0" value={{i}} type="radio">
+                            <label for="r0-{{i}}" class="icon-{{i}}"></label>
+                            {% endfor %}
+                        </div>
+                        <p class="name">{% player_name draft.red_player_name '0' %}</p>
+                    </div>
+                    <div class="container od_8">
+                        <div class="sp"></div>
+                        <div class="laneicon_wrap">
+                            {% for i in '01234'|make_list %}
+                            <input id="r1-{{i}}" name="r1" value={{i}} type="radio">
+                            <label for="r1-{{i}}" class="icon-{{i}}"></label>
+                            {% endfor %}
+                        </div>
+                        <p class="name">{% player_name draft.red_player_name '1' %}</p>
+                    </div>
+                    <div class="container od_11">
+                        <div class="sp"></div>
+                        <div class="laneicon_wrap">
+                            {% for i in '01234'|make_list %}
+                            <input id="r2-{{i}}" name="r2" value={{i}} type="radio">
+                            <label for="r2-{{i}}"class="icon-{{i}}"></label>
+                            {% endfor %}
+                        </div>
+                        <p class="name">{% player_name draft.red_player_name '2' %}</p>
+                    </div>
+                    <div class="container od_16">
+                        <div class="sp"></div>
+                        <div class="laneicon_wrap">
+                            {% for i in '01234'|make_list %}
+                            <input id="r3-{{i}}" name="r3" value={{i}} type="radio">
+                            <label for="r3-{{i}}"class="icon-{{i}}"></label>
+                            {% endfor %}
+                        </div>
+                        <p class="name">{% player_name draft.red_player_name '3' %}</p>
+                    </div>
+                    <div class="container od_19">
+                        <div class="sp"></div>
+                        <div class="laneicon_wrap">
+                            {% for i in '01234'|make_list %}
+                            <input id="r4-{{i}}" name="r4" value={{i}} type="radio">
+                            <label for="r4-{{i}}" class="icon-{{i}}"></label>
+                            {% endfor %}
+                        </div>
+                        <p class="name">{% player_name draft.red_player_name '4' %}</p>
+                    </div>
                 </div>
-                <div class="container od_8">
-                    <div class="sp"></div>
-                    <p class="name">{% player_name draft.red_player_name '1' %}</p>
-                </div>
-                <div class="container od_11">
-                    <div class="sp"></div>
-                    <p class="name">{% player_name draft.red_player_name '2' %}</p>
-                </div>
-                <div class="container od_16">
-                    <div class="sp"></div>
-                    <p class="name">{% player_name draft.red_player_name '3' %}</p>
-                </div>
-                <div class="container od_19">
-                    <div class="sp"></div>
-                    <p class="name">{% player_name draft.red_player_name '4' %}</p>
-                </div>
+                <div @click="laneChoiceDone('red')" id="lc_done">선택완료</div>
             </div>
+            <div v-if="laneRed" class="lane_wait">상대팀 선택중...</div>
             {% else %}
             <div id="spectator_wait" class="{{request.session.team}} team">
                 라인 조정중...
@@ -247,11 +315,13 @@
             timer:0,
             timerF:null,
             start:false,
+            laneBlue:false,
+            laneRed:false,
             order:0,
             draft:{
                 banpick:'',
                 temp:'',
-                team:'blue'
+                team:''
             },
             championsList:'',
             championsValid:[]
@@ -324,6 +394,12 @@
                 const now = Math.floor(Date.now()/1000)
                 axios.get('/draft/draft/{{draft.id}}')
                 .then(function(response){
+                    if(response.data.blue_done){
+                        self.laneBlue = true;
+                    }
+                    if(response.data.red_done){
+                        self.laneRed = true;
+                    }
                     if(response.data.timer){
                         {% if request.session.master == draft.id %}self.timer = now - response.data.timer;
                         self.countDownTimer();{% endif %}
@@ -334,6 +410,9 @@
                         banpick = response.data.banpick.split('/');
                         self.draft.banpick = banpick;
                         self.order = banpick.length;
+                        if(self.laneBlue && self.laneRed){
+                            self.order++;
+                        }
                         for(let i = 0; i < banpick.length; i++){
                             const el = document.querySelector('#team_wrap .od_' + String(i) + ' .sp');
                             if([6,7,8,9,10,11,16,17,18,19].includes(i)){
@@ -371,7 +450,7 @@
                         document.querySelector('.od_' + String(self.order+1)).classList.add('next');
                         document.querySelector('.od_' + String(self.order+1) + ' .order').innerHTML = '다음 차례에 선택'
                     }
-                    if(self.order == 20){
+                    if(self.order >= 20){
                         clearInterval(self.timerF);
                         self.timer = 30;
                         self.laneChoice();
@@ -426,12 +505,51 @@
                     const pick = this.draft.banpick[order];
                     const el_sp = document.querySelector('.lane .od_' + order + ' .sp');
                     el_sp.style.backgroundImage = 'url(/assets/img/champion82.png)';
-                    el_sp.style.backgroundPosition = '0px -' + String(pick * 82) + 'px';
+                    el_sp.style.backgroundPosition = '0px -' + String(pick * 100) + 'px';
                 }
                 {% endif %}
             },
+            laneChoiceDone(team){
+                let postData = new FormData();
+                {% if request.session.team == 'blue' %}
+                let cnt = 0;
+                for(let i = 0; i<5; i++){
+                    const temp = document.querySelector("input[name='b" + i + "']:checked")
+                    if(temp){
+                        postData.append(i,temp.value)
+                        cnt++;
+                    }else{
+                        alert('모든 라인을 선택해주세요.')
+                        break
+                    }
+                }
+                {% elif request.session.team == 'red' %}
+                let cnt = 0;
+                for(let i = 0; i<5; i++){
+                    const temp = document.querySelector("input[name='r" + i + "']:checked")
+                    if(temp){
+                        postData.append(i,temp.value)
+                        cnt++;
+                    }else{
+                        alert('모든 라인을 선택해주세요.')
+                        break
+                    }
+                }
+                {% endif %}
+                postData.append('team',team)
+                if(cnt==5){
+                    axios.post('/draft/lane/{{draft.id}}', postData, {xsrfCookieName: 'csrftoken', xsrfHeaderName: 'X-CSRFToken'})
+                    .then(function(response){
+                        if(response.data == 'error'){
+                            alert('중복되는 라인이 있습니다.')
+                            return false
+                        }else{
+                            draftSocket.send(JSON.stringify({'message': 'draftrefresh|'}));
+                        }
+                    })
+                }
+            },
             draftEnd(){
-                alert('end')
             },
             countDown(){
                 timer = this.timer + 1
