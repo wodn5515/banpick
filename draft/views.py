@@ -3,6 +3,7 @@ from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404, JsonResponse
 from django.utils import timezone
+from django.views.decorators.http import require_POST
 from .models import Draft, Champion
 import json, datetime
 # Create your views here.
@@ -81,9 +82,16 @@ def draft_draft(request, room_id):
                 if i != '999':
                     cp_list.remove(int(i))
             data['champions_valid'] = cp_list
+        if draft.blue_done and draft.red_done:
+            data['banpick'] = draft.banpick_final
+        else:
             data['banpick'] = draft.banpick
         if draft.timer:
             data['timer'] = int(draft.timer.timestamp())
+        if draft.blue_done:
+            data['blue_done'] = True
+        if draft.red_done:
+            data['red_done'] = True
         return JsonResponse(data, safe=False)
 
 
@@ -107,9 +115,33 @@ def draft_champion(request):
         cp_list.append(temp)
     return JsonResponse(data=cp_list, safe=False)
 
-def draft_timer(request, room_id):
+@require_POST
+def draft_lane(request, room_id):
     draft = Draft.objects.get(pk=room_id)
-    if request.session.get('master','') == room_id:
-        return JsonResponse({'asd':'asd'})
-    else:
-        return JsonResponse({'asd':'qwe'})
+    banpick = (draft.banpick_final.split('/') if draft.banpick_final else draft.banpick.split('/'))
+    team = request.POST.get('team')
+    od_arr = [] # 픽순 라인 리스트
+    cp_arr = [] # 챔피언 번호 리스트
+    temp_dic = {} # 픽 임시(픽순)
+    bp_f = [] # 픽 최종(라인순)
+    team_od = ([6,9,10,17,18] if team == 'blue' else [7,8,11,16,19])
+    for i in team_od:
+        cp_arr.append(banpick[i])
+    for i in range(5):
+        od_no = request.POST.get(str(i),'')
+        if od_no in od_arr:
+            return HttpResponse('error')
+        od_arr.append(od_no)
+        cnt = 0
+    for i in od_arr:
+        temp_dic[team_od[int(i)]] = cp_arr[cnt]
+        cnt += 1
+    for key, value in sorted(temp_dic.items()):
+        banpick[key] = value
+    draft.banpick_final = '/'.join(banpick)
+    if team == 'blue':
+        draft.blue_done = True
+    if team == 'red':
+        draft.red_done = True
+    draft.save()
+    return HttpResponse('/'.join(bp_f))

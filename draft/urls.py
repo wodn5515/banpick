@@ -15,6 +15,6 @@ urlpatterns = [
     path('draft/<str:room_id>', views.draft_draft, name="draft_draft"),
     #   챔피언 GET / POST
     path('champion', views.draft_champion, name="draft_champion"),
-    #   밴픽 타이머
-    path('timer/<str:room_id>', views.draft_timer, name="draft_timer")
+    #   라인선택 완료
+    path('lane/<str:room_id>', views.draft_lane, name="draft_lane")
 ]

@@ -41,6 +41,15 @@ class Draft(models.Model):
         verbose_name='밴픽최종', max_length=255, blank=True, default=""
     )
 
+    blue_done = models.BooleanField(
+        verbose_name='블루팀 라인', default=False
+    )
+
+    red_done = models.BooleanField(
+        verbose_name='레드팀 라인', default=False
+    )
+
+
     timer = models.DateTimeField(
         verbose_name="시작", blank=True, null=True
     )
