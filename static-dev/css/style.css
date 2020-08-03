@@ -154,6 +154,7 @@
 #room_wrap.end{grid:auto / 700px 700px; gap:90px; position:relative;}
 
 /* DRAFT TEAM */
+#room_wrap.end #team_wrap .team .container .name{overflow:visible; max-width:500px;}
 #room_wrap.end #team_wrap .team .ban{margin-bottom:0px;}
 #room_wrap.end #team_wrap .team .ban .container{display:block; width:82px; height:82px; margin-right:0px; margin-bottom:2px;}
 #room_wrap.end #team_wrap .team .ban .container .sp{background-size:82px 12136px;}
@@ -163,7 +164,7 @@
 #room_wrap.end #team_wrap .team.red .ban .container{margin-left:10px;}
 #room_wrap.end #team_wrap .team.blue .pick .container .sp{right:9px; left:auto;}
 #room_wrap.end #team_wrap .team.blue .pick .container .name{left:auto; right:110px;}
-#room_wrap.end #final_wrap{position:absolute; top:0px; width:}
+#room_wrap.end #final_wrap{position:absolute; top:0px;}
 /* DRAFT DRAFT */
 
 
