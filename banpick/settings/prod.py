@@ -8,7 +8,10 @@ DEBUG = False
 
 SECRET_KEY = SETTINGS_PROD_DIC["SECRET_KEY"]
 
-ALLOWED_HOSTS = ["13.209.254.130"]
+ALLOWED_HOSTS = [
+    "13.209.254.130",
+    "bnpk.kr"
+]
 
 DATABASES = {
     'default':SETTINGS_PROD_DIC['DATABASES']['default']
