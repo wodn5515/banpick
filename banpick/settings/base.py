@@ -68,14 +68,6 @@ WSGI_APPLICATION = 'banpick.wsgi.application'
 
 # Channels
 ASGI_APPLICATION = 'banpick.routing.application'
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            'hosts': [('127.0.0.1', 6379)],
-        },
-    },
-}
 
 # Session
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
