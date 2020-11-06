@@ -5,6 +5,7 @@ __pycache__
 venv
 db.sqlite3
 /static
+.vscode
 /uploads
 .DS_Store
 server_info.json
