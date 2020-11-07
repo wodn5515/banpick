@@ -1,8 +1,10 @@
 from .base import *
+from banpick.utils import get_server_info_value
 
+SETTINGS_PROD_DIC = get_server_info_value("production")
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '!9$ka^)4dmf^)id=p_4z#44jj+)f30zhnkdc4@iwy$pte_1l=o'
+SECRET_KEY = SETTINGS_PROD_DIC["SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -12,10 +14,7 @@ DEBUG = True
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    'default': SETTINGS_PROD_DIC['DATABASES']['default']
 }
 
 CHANNEL_LAYERS = {
