@@ -127,7 +127,7 @@
 #line_wrap > div > .lane > .container{width:20%; display:inline-block; font-size:16px; padding:20px 0;}
 #line_wrap > div > .lane > .container:nth-child(2n){background-color:#1f1f1f;}
 #line_wrap > div > .lane > .container:nth-child(2n-1){background-color:#2b2b2b;}
-#line_wrap > div > .lane > .container .sp{width:100px; height:100px; z-index:10; margin:0 auto; margin-bottom:20px; background-size:100px 14800px;}
+#line_wrap > div > .lane > .container .sp{width:100px; height:100px; z-index:10; margin:0 auto; margin-bottom:20px; background-size:100px 15200px;}
 #line_wrap .laneicon_wrap{margin-bottom:20px;}
 #line_wrap .laneicon_wrap input{display:none;}
 #line_wrap .laneicon_wrap label{width:50px; height:50px; background-image:url(../img/laneicons.png); display:inline-block; cursor:pointer; box-shadow:0px 0px 5px 3px #5c5c5c;}
@@ -157,7 +157,7 @@
 #room_wrap.end #team_wrap .team .container .name{overflow:visible; max-width:500px;}
 #room_wrap.end #team_wrap .team .ban{margin-bottom:0px;}
 #room_wrap.end #team_wrap .team .ban .container{display:block; width:82px; height:82px; margin-right:0px; margin-bottom:2px;}
-#room_wrap.end #team_wrap .team .ban .container .sp{background-size:82px 12136px;}
+#room_wrap.end #team_wrap .team .ban .container .sp{background-size:82px 12464px;}
 #room_wrap.end #team_wrap .team.blue .ban{float:left;}
 #room_wrap.end #team_wrap .team.blue .ban .container{margin-right:10px;}
 #room_wrap.end #team_wrap .team.red .ban{float:right;}
