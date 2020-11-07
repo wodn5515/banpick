@@ -11,7 +11,7 @@
             <div class="container after">
                 <div class="link f_left">
                     <a class="bold" target="_blank" href="{{draft.entry_url}}">
-                        <input id="draft_url" class="t_center" value="127.0.0.1:8000{{draft.entry_url}}" readonly>
+                        <input id="draft_url" class="t_center" value="" readonly>
                     </a>
                 </div>
                 <div class="copy f_left">
@@ -21,6 +21,7 @@
         </div>
     </div>
     <script type="text/javascript">
+    document.getElementById("draft_url").value = window.origin+"{{draft.entry_url}}";
     // 주소 복사하기
     function CopyDraftUrl(){
         var url = document.getElementById("draft_url");
@@ -33,6 +34,7 @@
         var parentNode = document.getElementById('home_wrap');
         var html = '<div class="alert_wrap bold">' + msg + '</div>'
         parentNode.innerHTML = parentNode.innerHTML + html;
+        document.getElementById("draft_url").value = window.origin+"{{draft.entry_url}}";
         clearTimeout(disappearFunc);
         clearTimeout(removeFunc);
         var el = document.getElementsByClassName('alert_wrap');
