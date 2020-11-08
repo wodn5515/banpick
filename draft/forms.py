@@ -45,3 +45,10 @@ class RoomCreateForm(forms.ModelForm):
     class Meta:
         model = Draft
         fields = ('match_name', 'blue_team_name', 'red_team_name', 'password')
+
+    def save(self, commit=True):
+        draft = super().save(commit=False)
+        draft.set_password(self.cleaned_data["password"])
+        if commit:
+            draft.save()
+        return draft
