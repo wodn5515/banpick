@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.hashers import make_password, check_password
 
 # Create your models here.
 
@@ -49,7 +50,6 @@ class Draft(models.Model):
         verbose_name='레드팀 라인', default=False
     )
 
-
     timer = models.DateTimeField(
         verbose_name="시작", blank=True, null=True
     )
@@ -64,7 +64,8 @@ class Draft(models.Model):
     def entry_url(self):
         return f'/draft/entry/{self.id}'
 
-
+    def set_password(self, raw_password):
+        self.password = make_password(raw_password)
 
 class Champion(models.Model):
 

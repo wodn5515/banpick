@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.hashers import check_password
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404, JsonResponse
@@ -27,7 +28,7 @@ def draft_entry(request, room_id):
         password = request.POST.get('password', '')
         team = request.POST.get('team', '')
         if team:
-            if password == draft.password:
+            if check_password(password, draft.password):
                 request.session['authorized_user' + str(draft.id)] = True
                 request.session['team'] = team
                 return redirect('/draft/room/' + str(draft.id))
