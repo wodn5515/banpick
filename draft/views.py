@@ -22,8 +22,8 @@ def draft_result(request):
                 'draft': draft
             })
 
-def draft_entry(request, room_id):
-    draft = Draft.objects.get(pk=room_id)
+def draft_entry(request, room_code):
+    draft = Draft.objects.get(code=room_code)
     if request.method == "POST":
         password = request.POST.get('password', '')
         team = request.POST.get('team', '')
@@ -31,7 +31,7 @@ def draft_entry(request, room_id):
             if check_password(password, draft.password):
                 request.session['authorized_user' + str(draft.id)] = True
                 request.session['team'] = team
-                return redirect('/draft/room/' + str(draft.id))
+                return redirect('/draft/room/' + str(draft.code))
             else:
                 messages.info(request, '비밀번호가 일치하지 않습니다.')
                 return render(request, 'draft_entry.html', {
@@ -49,12 +49,12 @@ def draft_entry(request, room_id):
             'draft': draft
         })
 
-def draft_room(request, room_id):
-    draft = Draft.objects.get(pk=room_id)
+def draft_room(request, room_code):
+    draft = Draft.objects.get(code=room_code)
     champions = Champion.objects.all().order_by('name')
     team = request.session.get('team', '')
     if not request.session.get('authorized_user' + str(draft.id), False):
-        return redirect('draft:draft_entry', draft.id)
+        return redirect('draft:draft_entry', draft.code)
     else:
         return render(request, 'draft_room.html', {
             'draft': draft,
@@ -62,8 +62,8 @@ def draft_room(request, room_id):
             'team': team
         })
 
-def draft_draft(request, room_id):
-    draft = Draft.objects.get(pk=room_id)
+def draft_draft(request, room_code):
+    draft = Draft.objects.get(code=room_code)
     if request.method == "POST":
         data = json.loads(request.body.decode("utf-8"))
         no = data['no']
@@ -99,9 +99,9 @@ def draft_draft(request, room_id):
 def draft_champion(request):
     lane = request.GET.get('lane')
     name = request.GET.get('name')
-    draft = request.GET.get('draft')
+    code = request.GET.get('code')
     cp_list = []
-    banpick = Draft.objects.get(pk=draft).banpick.split('/')
+    banpick = Draft.objects.get(code=code).banpick.split('/')
     champions = Champion.objects.all().order_by('name')
     if name != '':
         champions = champions.filter(keyword__contains=name).order_by('name')
@@ -117,8 +117,8 @@ def draft_champion(request):
     return JsonResponse(data=cp_list, safe=False)
 
 @require_POST
-def draft_lane(request, room_id):
-    draft = Draft.objects.get(pk=room_id)
+def draft_lane(request, room_code):
+    draft = Draft.objects.get(code=room_code)
     banpick = (draft.banpick_final.split('/') if draft.banpick_final else draft.banpick.split('/'))
     team = request.POST.get('team')
     od_arr = [] # 픽순 라인 리스트

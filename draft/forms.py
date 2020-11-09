@@ -1,11 +1,13 @@
 from django import forms
+from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from .models import Draft
+import uuid
 
-class RoomCreateForm(forms.ModelForm):
+class DraftCreateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('label_suffix', '')
-        super(RoomCreateForm, self).__init__(*args, **kwargs)
+        super(DraftCreateForm, self).__init__(*args, **kwargs)
     
     match_name = forms.CharField(
         label="매치명",
@@ -48,7 +50,14 @@ class RoomCreateForm(forms.ModelForm):
 
     def save(self, commit=True):
         draft = super().save(commit=False)
+        draft.code = str(uuid.uuid4())
         draft.set_password(self.cleaned_data["password"])
         if commit:
             draft.save()
         return draft
+
+
+class DraftChangeForm(forms.ModelForm):
+    password = ReadOnlyPasswordHashField(
+        label="비밀번호"
+    )

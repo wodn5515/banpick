@@ -14,12 +14,12 @@ class Draft(models.Model):
         verbose_name='매치 이름', max_length=255
     )
 
-    red_team_name = models.CharField(
-        verbose_name='레드팀 팀명', max_length=255
+    code = models.CharField(
+        verbose_name='방 코드', unique=True, null=True, max_length=255
     )
 
-    red_player_name = models.CharField(
-        verbose_name='레드팀 플레이어명', default='', max_length=100
+    password = models.CharField(
+        verbose_name='패스워드', max_length=255
     )
 
     blue_team_name = models.CharField(
@@ -30,8 +30,12 @@ class Draft(models.Model):
         verbose_name='블루팀 플레이어명', default='', max_length=100
     )
 
-    password = models.CharField(
-        verbose_name='패스워드', max_length=255
+    red_team_name = models.CharField(
+        verbose_name='레드팀 팀명', max_length=255
+    )
+
+    red_player_name = models.CharField(
+        verbose_name='레드팀 플레이어명', default='', max_length=100
     )
 
     banpick = models.CharField(
@@ -57,12 +61,12 @@ class Draft(models.Model):
     date = models.DateTimeField(
         verbose_name="일시", default=timezone.now
     )
-
+    
     def __str__(self):
         return f'{self.match_name}'
 
     def entry_url(self):
-        return f'/draft/entry/{self.id}'
+        return f'/draft/entry/{self.code}'
 
     def set_password(self, raw_password):
         self.password = make_password(raw_password)
