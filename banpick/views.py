@@ -21,5 +21,3 @@ def home(request):
         return render(request, 'home.html', {
             'forms': forms
         })
-    
-    string.ascii_letters
