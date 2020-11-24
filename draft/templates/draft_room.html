@@ -307,7 +307,7 @@
     const team = "{{request.session.team}}";
     const master = "{{request.session.master}}";
     const draftSocket = new WebSocket(
-        'ws://' + window.location.host + 
+        'wss://' + window.location.host + 
         '/ws/draft/' + roomId + '/'
     );
     </script>
