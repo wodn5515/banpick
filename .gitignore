@@ -13,3 +13,4 @@ uwsgi.ini
 uwsgi.sock
 django.log
 mysql
+lolcrawler.py
