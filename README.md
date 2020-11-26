@@ -20,7 +20,12 @@ This is Website for League of legends players.
 
 ## Screenshot
 ![Home](https://user-images.githubusercontent.com/42237426/100311811-09ed3b80-2ff4-11eb-93e9-f2659994212a.png)
+> You can set match name, blue team name, red team name, password.
+
 ![Home-example](https://user-images.githubusercontent.com/42237426/100311818-0ce82c00-2ff4-11eb-9c73-f9de5e39e859.png)
+> If you want, you can set players name as you click text("플레이어 입력하기") at right top corner of text box.
+  Click start button where is at bottom of form when you ready.
+
 ![Get-URL](https://user-images.githubusercontent.com/42237426/100311832-140f3a00-2ff4-11eb-961a-2d37b231fc66.png)
 ![Entry](https://user-images.githubusercontent.com/42237426/100311837-16719400-2ff4-11eb-8aad-a998fb412c06.png)
 ![Room](https://user-images.githubusercontent.com/42237426/100311845-1a9db180-2ff4-11eb-8915-5fced0ff3f6d.png)
