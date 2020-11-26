@@ -48,4 +48,6 @@ This is Website for League of legends players.
 
 
 ## License
-MoveItMovie is released under the MIT License. http://www.opensource.org/licenses/mit-license
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+banpick is released under the MIT License. http://www.opensource.org/licenses/mit-license
