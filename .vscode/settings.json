@@ -1,6 +1,0 @@
-{
-    "python.pythonPath": "venv/bin/python3.6",
-    "python.linting.pylintArgs": [
-        "--disable=C,W",
-    ],
-}
