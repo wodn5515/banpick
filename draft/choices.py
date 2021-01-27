@@ -1,0 +1,1 @@
+MODE_CHOICES = (("1", "Single Play"), ("2", "Multi Play"))
