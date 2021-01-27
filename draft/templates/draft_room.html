@@ -5,9 +5,7 @@
 {% block body %}
 <body>
     <div id="app">
-        <div id="home_logo" class="t_center">
-            <img class="block center" src="{% static 'img/home_logo.png' %}">
-        </div>
+        {% include "logo.html" %}
         <div id="timer_wrap" class="t_center bold" :class="[order == 21 ? 'end' : '']">
             <div class="turn blue">
                 <p>{{draft.blue_team_name}} TEAM</p><div class="bar"></div>
@@ -107,7 +105,7 @@
                         </i>
                     </div>
                 </div>
-                <div id="champion_select" v-if="draft.team == '{{request.session.team}}'" :class="order|selectClassName" @click="draftChoice()">
+                <div id="champion_select" {% if draft.mode == "2" %}v-if="draft.team == '{{request.session.team}}'"{% endif %} :class="order|selectClassName" @click="draftChoice()">
                     <p class="t_center">[[order|selectHtml]]</p>
                 </div>
             </div>
@@ -306,12 +304,18 @@
     const roomCode = "{{ draft.code|escapejs }}";
     const team = "{{request.session.team}}";
     const master = "{{request.session.master}}";
+    {% if draft.mode == "2" %}
     const draftSocket = new WebSocket(
         'wss://' + window.location.hostname + 
         ':8443/ws/draft/' + roomId + '/'
     );
+    {% endif %}
     </script>
-    <script type="text/javascript" src="{% static 'js/draft.js' %}"></script>
+    {% if draft.mode == "2" %}
+    <script type="text/javascript" src="{% static 'js/draft-multi.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/websocket.js' %}"></script>
+    {% else %}
+    <script type="text/javascript" src="{% static 'js/draft-single.js' %}"></script>
+    {% endif %}
 </body>
 {% endblock body %}

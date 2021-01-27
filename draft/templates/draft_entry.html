@@ -3,10 +3,8 @@
 {% block title %}{{draft.match_name}} 입장 | 밴픽 도우미{% endblock title %}
 {% block body %}
 <body>
-    <div id="home_wrap">
-        <div id="home_logo">
-            <img src="{% static 'img/home_logo.png' %}">
-        </div>
+    <div id="home_wrap" class="flex">
+        {% include "logo.html" %}
         <div id="entry_wrap">
         <form method="POST" action="" autocomplete="off">
             {% csrf_token %}
