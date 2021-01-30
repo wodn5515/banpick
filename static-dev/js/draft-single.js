@@ -290,17 +290,8 @@ const draft = new Vue({
     laneChoiceDoneSingle() {
       const self = this;
       let postData = new FormData();
-      for (let i = 0; i < 5; i++) {
-        const temp = document.querySelector("input[name='b" + i + "']:checked");
-        if (temp) {
-          postData.append(i, temp.value);
-        } else {
-          alert("모든 라인을 선택해주세요.");
-          break;
-        }
-      }
-      for (let i = 0; i < 5; i++) {
-        const temp = document.querySelector("input[name='r" + i + "']:checked");
+      for (let i = 0; i < 10; i++) {
+        const temp = document.querySelector(".laneicon_wrap input:checked");
         if (temp) {
           postData.append(i, temp.value);
         } else {
