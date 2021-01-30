@@ -25,25 +25,36 @@ def draft_result(request):
 def draft_entry(request, room_code):
     draft = Draft.objects.get(code=room_code)
     if request.method == "POST":
-        password = request.POST.get('password', '')
-        team = request.POST.get('team', '')
-        if team:
+        if draft.mode == "1":
+            password = request.POST.get('password', '')
             if check_password(password, draft.password):
                 request.session['authorized_user' + str(draft.id)] = True
-                request.session['team'] = team
                 return redirect('/draft/room/' + str(draft.code))
             else:
                 messages.info(request, '비밀번호가 일치하지 않습니다.')
                 return render(request, 'draft_entry.html', {
+                    'draft': draft
+                })
+        else:
+            password = request.POST.get('password', '')
+            team = request.POST.get('team', '')
+            if team:
+                if check_password(password, draft.password):
+                    request.session['authorized_user' + str(draft.id)] = True
+                    request.session['team'] = team
+                    return redirect('/draft/room/' + str(draft.code))
+                else:
+                    messages.info(request, '비밀번호가 일치하지 않습니다.')
+                    return render(request, 'draft_entry.html', {
+                        'draft': draft,
+                        'team': team
+                    })
+            else:
+                messages.info(request, '팀을 선택해주세요.')
+                return render(request, 'draft_entry.html', {
                     'draft': draft,
                     'team': team
                 })
-        else:
-            messages.info(request, '팀을 선택해주세요.')
-            return render(request, 'draft_entry.html', {
-                'draft': draft,
-                'team': team
-            })
     else:
         return render(request, 'draft_entry.html', {
             'draft': draft
@@ -119,30 +130,34 @@ def draft_champion(request):
 @require_POST
 def draft_lane(request, room_code):
     draft = Draft.objects.get(code=room_code)
-    banpick = (draft.banpick_final.split('/') if draft.banpick_final else draft.banpick.split('/'))
-    team = request.POST.get('team')
-    od_arr = [] # 픽순 라인 리스트
-    cp_arr = [] # 챔피언 번호 리스트
-    temp_dic = {} # 픽 임시(픽순)
-    bp_f = [] # 픽 최종(라인순)
-    team_od = ([6,9,10,17,18] if team == 'blue' else [7,8,11,16,19])
-    for i in team_od:
-        cp_arr.append(banpick[i])
-    for i in range(5):
-        od_no = request.POST.get(str(i),'')
-        if od_no in od_arr:
-            return HttpResponse('error')
-        od_arr.append(od_no)
+    if draft.mode == "1":
+        banpick = draft.banpick.split("/")
+
+    else:
+        banpick = (draft.banpick_final.split('/') if draft.banpick_final else draft.banpick.split('/'))
+        team = request.POST.get('team')
+        od_arr = [] # 픽순 라인 리스트
+        cp_arr = [] # 챔피언 번호 리스트
+        temp_dic = {} # 픽 임시(픽순)
+        bp_f = [] # 픽 최종(라인순)
         cnt = 0
-    for i in od_arr:
-        temp_dic[team_od[int(i)]] = cp_arr[cnt]
-        cnt += 1
-    for key, value in sorted(temp_dic.items()):
-        banpick[key] = value
-    draft.banpick_final = '/'.join(banpick)
-    if team == 'blue':
-        draft.blue_done = True
-    if team == 'red':
-        draft.red_done = True
-    draft.save()
-    return HttpResponse('/'.join(bp_f))
+        team_od = ([6,9,10,17,18] if team == 'blue' else [7,8,11,16,19])
+        for i in team_od:
+            cp_arr.append(banpick[i])
+        for i in range(5):
+            od_no = request.POST.get(str(i),'')
+            if od_no in od_arr:
+                return HttpResponse('error')
+            od_arr.append(od_no)
+        for i in od_arr:
+            temp_dic[team_od[int(i)]] = cp_arr[cnt]
+            cnt += 1
+        for key, value in sorted(temp_dic.items()):
+            banpick[key] = value
+        draft.banpick_final = '/'.join(banpick)
+        if team == 'blue':
+            draft.blue_done = True
+        if team == 'red':
+            draft.red_done = True
+        draft.save()
+        return HttpResponse('/'.join(bp_f))
