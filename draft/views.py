@@ -6,6 +6,7 @@ from django.http import HttpResponse, Http404, JsonResponse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 from .models import Draft, Champion
+from .utils import lane_choice_done
 import json, datetime
 # Create your views here.
 
@@ -130,34 +131,4 @@ def draft_champion(request):
 @require_POST
 def draft_lane(request, room_code):
     draft = Draft.objects.get(code=room_code)
-    if draft.mode == "1":
-        banpick = draft.banpick.split("/")
-
-    else:
-        banpick = (draft.banpick_final.split('/') if draft.banpick_final else draft.banpick.split('/'))
-        team = request.POST.get('team')
-        od_arr = [] # 픽순 라인 리스트
-        cp_arr = [] # 챔피언 번호 리스트
-        temp_dic = {} # 픽 임시(픽순)
-        bp_f = [] # 픽 최종(라인순)
-        cnt = 0
-        team_od = ([6,9,10,17,18] if team == 'blue' else [7,8,11,16,19])
-        for i in team_od:
-            cp_arr.append(banpick[i])
-        for i in range(5):
-            od_no = request.POST.get(str(i),'')
-            if od_no in od_arr:
-                return HttpResponse('error')
-            od_arr.append(od_no)
-        for i in od_arr:
-            temp_dic[team_od[int(i)]] = cp_arr[cnt]
-            cnt += 1
-        for key, value in sorted(temp_dic.items()):
-            banpick[key] = value
-        draft.banpick_final = '/'.join(banpick)
-        if team == 'blue':
-            draft.blue_done = True
-        if team == 'red':
-            draft.red_done = True
-        draft.save()
-        return HttpResponse('/'.join(bp_f))
+    return HttpResponse(lane_choice_done(request, draft))
