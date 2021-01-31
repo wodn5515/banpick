@@ -45,4 +45,4 @@ def lane_choice_done(request, draft):
         draft.blue_done = True
         draft.red_done = True
     draft.save()
-    return draft.banpick_final
+    return "pass"

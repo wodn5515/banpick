@@ -290,28 +290,35 @@ const draft = new Vue({
     laneChoiceDoneSingle() {
       const self = this;
       let postData = new FormData();
+      let cnt = 0;
       for (let i = 0; i < 10; i++) {
-        const temp = document.querySelector(".laneicon_wrap input:checked");
+        const temp = document.querySelector(
+          ".laneicon_wrap input[name='" + i + "']:checked"
+        );
         if (temp) {
+          console.log(temp);
           postData.append(i, temp.value);
+          cnt++;
         } else {
           alert("모든 라인을 선택해주세요.");
           break;
         }
       }
-      axios
-        .post("/draft/lane/" + roomCode, postData, {
-          xsrfCookieName: "csrftoken",
-          xsrfHeaderName: "X-CSRFToken",
-        })
-        .then(function (response) {
-          if (response.data == "error") {
-            alert("중복되는 라인이 있습니다.");
-            return false;
-          } else {
-            console.log("통과");
-          }
-        });
+      if (cnt == 10) {
+        axios
+          .post("/draft/lane/" + roomCode, postData, {
+            xsrfCookieName: "csrftoken",
+            xsrfHeaderName: "X-CSRFToken",
+          })
+          .then(function (response) {
+            if (response.data == "error") {
+              alert("중복되는 라인이 있습니다.");
+              return false;
+            } else {
+              self.draftRefresh();
+            }
+          });
+      }
     },
     draftEnd() {},
     countDown() {
