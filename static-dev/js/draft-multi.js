@@ -138,7 +138,7 @@ const draft = new Vue({
                 } else {
                   el.style.backgroundImage = "url(/assets/img/champion80.png)";
                   el.style.backgroundPosition =
-                    "0px -" + String(banpick[i] * 52) + "px";
+                    "0px -" + String(banpick[i] * 50) + "px";
                 }
               }
             }
