@@ -19,7 +19,7 @@ const draft = new Vue({
   watch: {
     timer: function (newTimer, oldTimer) {
       if (master == roomId) {
-        if (this.start && newTimer == 29) {
+        if (this.start && newTimer == 31) {
           const self = this;
           if ([0, 1, 2, 3, 4, 5, 12, 13, 14, 15].includes(self.order)) {
             self.draft.temp = "999";
@@ -41,7 +41,7 @@ const draft = new Vue({
   },
   filters: {
     timerDp(timer) {
-      return timer / 28 < 1 ? 27 - (timer % 28) : 0;
+      return timer / 30 < 1 ? 29 - (timer % 30) : 0;
     },
     selectClassName(order) {
       return [0, 1, 2, 3, 4, 5, 12, 13, 14, 15].includes(order)
