@@ -129,7 +129,7 @@
 
 #line_wrap{width:1400px; margin:0 45px; position:relative; min-height:500px; font-weight:bold;}
 #line_wrap > p{text-align:center; font-size:40px; margin-bottom:30px;}
-#line_wrap > div > .lane{text-align:center; font-size:0px;}
+#line_wrap > div > .lane{text-align:center; font-size:0px; margin-bottom:10px;}
 #line_wrap > div > .lane.blue{box-shadow:0px 0px 5px 3px #0c3897;}
 #line_wrap > div > .lane.red{box-shadow:0px 0px 5px 3px #b80000;}
 #line_wrap > div > .lane > .container{width:20%; display:inline-block; font-size:16px; padding:20px 0;}
