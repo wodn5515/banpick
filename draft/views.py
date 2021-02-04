@@ -14,11 +14,11 @@ def draft_result(request):
     if request.method == 'POST':
         return redirect('home')
     else:
-        if not request.session.get('room_id', False):
+        if not request.session.get('master', False):
             return redirect('home')
         else:
-            room_id = request.session['room_id']
-            draft = Draft.objects.get(pk=room_id)
+            master = request.session['master']
+            draft = Draft.objects.get(pk=master)
             return render(request, 'draft_result.html', {
                 'draft': draft
             })
@@ -27,15 +27,20 @@ def draft_entry(request, room_code):
     draft = Draft.objects.get(code=room_code)
     if request.method == "POST":
         if draft.mode == "1":
-            password = request.POST.get('password', '')
-            if check_password(password, draft.password):
-                request.session['authorized_user' + str(draft.id)] = True
-                return redirect('/draft/room/' + str(draft.code))
-            else:
-                messages.info(request, '비밀번호가 일치하지 않습니다.')
-                return render(request, 'draft_entry.html', {
-                    'draft': draft
-                })
+            if request.session.get("master", "") == draft.id:
+                password = request.POST.get('password', '')
+                if check_password(password, draft.password):
+                    request.session['authorized_user' + str(draft.id)] = True
+                    return redirect('/draft/room/' + str(draft.code))
+                else:
+                    messages.info(request, '비밀번호가 일치하지 않습니다.')
+                    return render(request, 'draft_entry.html', {
+                        'draft': draft
+                    })
+            messages.info(request, '권한이 없습니다.')
+            return render(request, 'draft_entry.html', {
+                'draft': draft
+            })
         else:
             password = request.POST.get('password', '')
             team = request.POST.get('team', '')
@@ -65,6 +70,11 @@ def draft_room(request, room_code):
     draft = Draft.objects.get(code=room_code)
     champions = Champion.objects.all().order_by('name')
     team = request.session.get('team', '')
+    if not request.session.get("master", False) and draft.mode == "1":
+        messages.info(request, '권한이 없습니다.')
+        return render(request, 'draft_entry.html', {
+            'draft': draft
+        })
     if not request.session.get('authorized_user' + str(draft.id), False):
         return redirect('draft:draft_entry', draft.code)
     else:

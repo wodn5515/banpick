@@ -15,7 +15,6 @@ def home(request):
             new_draft.blue_player_name = blue_player
             new_draft.mode = mode
             new_draft.save()
-            request.session['room_id'] = new_draft.id
             request.session['master'] = new_draft.id
             return redirect('draft:draft_result')
     else:
