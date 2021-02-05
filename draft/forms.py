@@ -44,7 +44,7 @@ class DraftCreateForm(forms.ModelForm):
         widget=forms.PasswordInput(attrs={
             'class': 'bg_black bold draft_input',
             'onkeyup': 'submitable()',
-            "autocomplete": "off"
+            "autocomplete": "new-password"
         })
     )
 
