@@ -14,3 +14,9 @@
 .b_black{border-color:#0c0c0c;}
 .b_blue{border-color:#0c3897;}
 .b_red{border-color:#b80000;}
+.flex {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}

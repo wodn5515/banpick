@@ -3,13 +3,12 @@
 {% block title %}{{draft.match_name}} 입장 | 밴픽 도우미{% endblock title %}
 {% block body %}
 <body>
-    <div id="home_wrap">
-        <div id="home_logo">
-            <img src="{% static 'img/home_logo.png' %}">
-        </div>
+    <div id="home_wrap" class="flex">
+        {% include "logo.html" %}
         <div id="entry_wrap">
         <form method="POST" action="" autocomplete="off">
             {% csrf_token %}
+            {% if draft.mode == "2" %}
             <div id="tc_wrap">
                 <input id="blue_team" type="radio" name="team" value="blue" {% if team == 'blue' %}checked='checked'{% endif %}>
                 <label for="blue_team" class="inline_block blue bold">{{draft.blue_team_name}}</label>
@@ -18,6 +17,7 @@
                 <input id="spectator" type="radio" name="team" value="none" {% if team == 'spectator' %}checked='checked'{% endif %}>
                 <label for="spectator" class="block black bold">관 전</label>
             </div>
+            {% endif %}
             <div id="password_wrap" class="after">
                 <label for="pw_input" class="inline_block f_left bold">비밀번호</label>
                 <input id="pw_input" name="password" class="inline_block f_left" type="password" autofocus='true'>

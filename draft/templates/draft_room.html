@@ -5,10 +5,8 @@
 {% block body %}
 <body>
     <div id="app">
-        <div id="home_logo" class="t_center">
-            <img class="block center" src="{% static 'img/home_logo.png' %}">
-        </div>
-        <div id="timer_wrap" class="t_center bold" :class="[order == 21 ? 'end' : '']">
+        {% include "logo.html" %}
+        <div id="timer_wrap" class="t_center bold" v-show="order != 20" :class="[order == 21 ? 'end' : '']">
             <div class="turn blue">
                 <p>{{draft.blue_team_name}} TEAM</p><div class="bar"></div>
             </div>
@@ -107,7 +105,7 @@
                         </i>
                     </div>
                 </div>
-                <div id="champion_select" v-if="draft.team == '{{request.session.team}}'" :class="order|selectClassName" @click="draftChoice()">
+                <div id="champion_select" {% if draft.mode == "2" %}v-if="draft.team == '{{request.session.team}}'"{% endif %} :class="order|selectClassName" @click="draftChoice()">
                     <p class="t_center">[[order|selectHtml]]</p>
                 </div>
             </div>
@@ -177,7 +175,117 @@
         </div>
         <div id="line_wrap" class="{{request.session.team}}" v-show="order == 20">
             <p>라인 선택</p>
-            {% if  request.session.team == 'blue'%}
+            {% if draft.mode == "1" %}
+            <div>
+                <div class="blue lane">
+                    <div class="container od_6">
+                        <div class="sp"></div>
+                        <div class="laneicon_wrap">
+                            {% for i in '01234'|make_list %}
+                            <input id="b0-{{i}}" name="0" value={{i}} type="radio">
+                            <label for="b0-{{i}}" class="icon-{{i}}"></label>
+                            {% endfor %}
+                        </div>
+                        <p class="name">{% player_name draft.blue_player_name '0' %}</p>
+                    </div>
+                    <div class="container od_9">
+                        <div class="sp"></div>
+                        <div class="laneicon_wrap">
+                            {% for i in '01234'|make_list %}
+                            <input id="b1-{{i}}" name="1" value={{i}} type="radio">
+                            <label for="b1-{{i}}" class="icon-{{i}}"></label>
+                            {% endfor %}
+                        </div>
+                        <p class="name">{% player_name draft.blue_player_name '1' %}</p>
+                    </div>
+                    <div class="container od_10">
+                        <div class="sp"></div>
+                        <div class="laneicon_wrap">
+                            {% for i in '01234'|make_list %}
+                            <input id="b2-{{i}}" name="2" value={{i}} type="radio">
+                            <label for="b2-{{i}}"class="icon-{{i}}"></label>
+                            {% endfor %}
+                        </div>
+                        <p class="name">{% player_name draft.blue_player_name '2' %}</p>
+                    </div>
+                    <div class="container od_17">
+                        <div class="sp"></div>
+                        <div class="laneicon_wrap">
+                            {% for i in '01234'|make_list %}
+                            <input id="b3-{{i}}" name="3" value={{i}} type="radio">
+                            <label for="b3-{{i}}"class="icon-{{i}}"></label>
+                            {% endfor %}
+                        </div>
+                        <p class="name">{% player_name draft.blue_player_name '3' %}</p>
+                    </div>
+                    <div class="container od_18">
+                        <div class="sp"></div>
+                        <div class="laneicon_wrap">
+                            {% for i in '01234'|make_list %}
+                            <input id="b4-{{i}}" name="4" value={{i}} type="radio">
+                            <label for="b4-{{i}}" class="icon-{{i}}"></label>
+                            {% endfor %}
+                        </div>
+                        <p class="name">{% player_name draft.blue_player_name '4' %}</p>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="red lane">
+                    <div class="container od_7">
+                        <div class="sp"></div>
+                        <div class="laneicon_wrap">
+                            {% for i in '01234'|make_list %}
+                            <input id="r0-{{i}}" name="5" value={{i}} type="radio">
+                            <label for="r0-{{i}}" class="icon-{{i}}"></label>
+                            {% endfor %}
+                        </div>
+                        <p class="name">{% player_name draft.red_player_name '0' %}</p>
+                    </div>
+                    <div class="container od_8">
+                        <div class="sp"></div>
+                        <div class="laneicon_wrap">
+                            {% for i in '01234'|make_list %}
+                            <input id="r1-{{i}}" name="6" value={{i}} type="radio">
+                            <label for="r1-{{i}}" class="icon-{{i}}"></label>
+                            {% endfor %}
+                        </div>
+                        <p class="name">{% player_name draft.red_player_name '1' %}</p>
+                    </div>
+                    <div class="container od_11">
+                        <div class="sp"></div>
+                        <div class="laneicon_wrap">
+                            {% for i in '01234'|make_list %}
+                            <input id="r2-{{i}}" name="7" value={{i}} type="radio">
+                            <label for="r2-{{i}}"class="icon-{{i}}"></label>
+                            {% endfor %}
+                        </div>
+                        <p class="name">{% player_name draft.red_player_name '2' %}</p>
+                    </div>
+                    <div class="container od_16">
+                        <div class="sp"></div>
+                        <div class="laneicon_wrap">
+                            {% for i in '01234'|make_list %}
+                            <input id="r3-{{i}}" name="8" value={{i}} type="radio">
+                            <label for="r3-{{i}}"class="icon-{{i}}"></label>
+                            {% endfor %}
+                        </div>
+                        <p class="name">{% player_name draft.red_player_name '3' %}</p>
+                    </div>
+                    <div class="container od_19">
+                        <div class="sp"></div>
+                        <div class="laneicon_wrap">
+                            {% for i in '01234'|make_list %}
+                            <input id="r4-{{i}}" name="9" value={{i}} type="radio">
+                            <label for="r4-{{i}}" class="icon-{{i}}"></label>
+                            {% endfor %}
+                        </div>
+                        <p class="name">{% player_name draft.red_player_name '4' %}</p>
+                    </div>
+                </div>
+                <div @click="laneChoiceDoneSingle()" id="lc_done">선택완료</div>
+            </div>
+            {% elif request.session.team == 'blue'%}
             <div v-show="!laneBlue">
                 <div class="{{request.session.team}} lane">
                     <div class="container od_6">
@@ -306,12 +414,18 @@
     const roomCode = "{{ draft.code|escapejs }}";
     const team = "{{request.session.team}}";
     const master = "{{request.session.master}}";
+    </script>
+    {% if draft.mode == "2" %}
+    <script>
     const draftSocket = new WebSocket(
         'wss://' + window.location.hostname + 
         ':8443/ws/draft/' + roomId + '/'
     );
     </script>
-    <script type="text/javascript" src="{% static 'js/draft.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/draft-multi.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/websocket.js' %}"></script>
+    {% else %}
+    <script type="text/javascript" src="{% static 'js/draft-single.js' %}"></script>
+    {% endif %}
 </body>
 {% endblock body %}

@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.hashers import make_password, check_password
+from .choices import MODE_CHOICES
 
 # Create your models here.
 
@@ -9,6 +10,10 @@ class Draft(models.Model):
     class Meta:
         verbose_name = ('밴픽')
         verbose_name_plural = ('밴픽')
+
+    mode = models.CharField(
+        verbose_name="모드", max_length=20, choices=MODE_CHOICES, default='1'
+    )
 
     match_name = models.CharField(
         verbose_name='매치 이름', max_length=255
@@ -79,7 +84,6 @@ class Champion(models.Model):
 
     no = models.CharField(verbose_name='챔피언번호', max_length=3, default='')
     name = models.CharField(verbose_name='챔피언명', max_length=20, default='', help_text='한글로 입력해주세요. ex)가렌')
-    keyword = models.CharField(verbose_name='검색어', max_length=255, default='', help_text='"/" 로 구분해주세요. ex)가렌/garen')
     lane = models.CharField(verbose_name='라인', max_length=20, default='', help_text='한글로 입력해주세요. ex)탑/미드')
 
     def __str__(self):
