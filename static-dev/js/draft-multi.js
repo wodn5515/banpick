@@ -24,7 +24,10 @@ const draft = new Vue({
           if ([0, 1, 2, 3, 4, 5, 12, 13, 14, 15].includes(self.order)) {
             self.draft.temp = "999";
           } else {
-            self.draft.temp = randomArray(self.championsValid);
+            if (self.draft.temp) {
+            } else {
+              self.draft.temp = randomArray(self.championsValid);
+            }
           }
           self.draftChoice();
         }
@@ -203,8 +206,7 @@ const draft = new Vue({
     },
     draftChoice() {
       const self = this;
-      const order = this.order;
-      const no = this.draft.temp;
+      let no = self.draft.temp;
       if (no) {
         const postData = { no };
         axios
@@ -215,7 +217,6 @@ const draft = new Vue({
           .then(function (response) {
             draftSocket.send(JSON.stringify({ message: "draftrefresh|" }));
             el = document.querySelector(".sp-" + no);
-            self.order++;
             if (document.querySelector("input[name='name']").value) {
               document.querySelector("input[name='name']").value == "";
             }
