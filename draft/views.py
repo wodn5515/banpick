@@ -126,9 +126,9 @@ def draft_champion(request):
     banpick = Draft.objects.get(code=code).banpick.split('/')
     champions = Champion.objects.all().order_by('name')
     if name != '':
-        champions = champions.filter(keyword__contains=name).order_by('name')
+        champions = champions.filter(name__contains=name)
     if lane != '':
-        champions = champions.filter(lane=lane).order_by('name')
+        champions = champions.filter(lane=lane)
     for i in champions:
         temp = {}
         temp['no'] = i.no
