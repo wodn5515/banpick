@@ -14,7 +14,8 @@ class DraftCreateForm(forms.ModelForm):
         widget=forms.TextInput(attrs={
             'class': 'bg_black bold draft_input',
             'autofocus': 'true',
-            'onkeyup': 'submitable()'
+            'onkeyup': 'submitable()',
+            "autocomplete": "off"
         })
     )
 
@@ -23,7 +24,8 @@ class DraftCreateForm(forms.ModelForm):
         help_text="<span class='f_right player_check'><input id='blue_player_check' class='blue' type='checkbox' onchange='playerCheck(event);'><label for='blue_player_check'>플레이어 입력하기</label></span>",
         widget=forms.TextInput(attrs={
             'class': 'bg_blue bold draft_input',
-            'onkeyup': 'submitable()'
+            'onkeyup': 'submitable()',
+            "autocomplete": "off"
         })
     )
 
@@ -32,7 +34,8 @@ class DraftCreateForm(forms.ModelForm):
         help_text="<span class='f_right player_check'><input id='red_player_check' class='red' type='checkbox' onchange='playerCheck(event);'><label for='red_player_check'>플레이어 입력하기</label></span>",
         widget=forms.TextInput(attrs={
             'class': 'bg_red bold draft_input',
-            'onkeyup': 'submitable()'
+            'onkeyup': 'submitable()',
+            "autocomplete": "off"
         })
     )
 
@@ -40,7 +43,8 @@ class DraftCreateForm(forms.ModelForm):
         label="비밀번호",
         widget=forms.PasswordInput(attrs={
             'class': 'bg_black bold draft_input',
-            'onkeyup': 'submitable()'
+            'onkeyup': 'submitable()',
+            "autocomplete": "off"
         })
     )
 
