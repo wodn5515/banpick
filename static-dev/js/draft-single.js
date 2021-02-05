@@ -104,6 +104,10 @@ const draft = new Vue({
         }
         if (response.data.timer) {
           if (master == roomId) {
+            if (self.timerF) {
+              clearInterval(self.timerF);
+              self.timerF = false;
+            }
             self.timer = now - response.data.timer;
             self.countDownTimer();
           }
