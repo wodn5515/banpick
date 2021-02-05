@@ -418,8 +418,8 @@
     {% if draft.mode == "2" %}
     <script>
     const draftSocket = new WebSocket(
-        'ws://' + window.location.hostname + 
-        '/ws/draft/' + roomId + '/'
+        'wss://' + window.location.hostname + 
+        ':8443/ws/draft/' + roomId + '/'
     );
     </script>
     <script type="text/javascript" src="{% static 'js/draft-multi.js' %}"></script>
