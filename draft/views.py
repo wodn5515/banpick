@@ -128,7 +128,7 @@ def draft_champion(request):
     if name != '':
         champions = champions.filter(name__contains=name)
     if lane != '':
-        champions = champions.filter(lane=lane)
+        champions = champions.filter(lane__contains=lane)
     for i in champions:
         temp = {}
         temp['no'] = i.no
