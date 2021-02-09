@@ -126,7 +126,7 @@ def draft_champion(request):
     banpick = Draft.objects.get(code=code).banpick.split('/')
     champions = Champion.objects.all().order_by('name')
     if name != '':
-        champions = champions.filter(name__contains=name)
+        champions = champions.filter(keyword__contains=name)
     if lane != '':
         champions = champions.filter(lane__contains=lane)
     for i in champions:

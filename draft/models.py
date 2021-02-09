@@ -85,6 +85,7 @@ class Champion(models.Model):
     no = models.CharField(verbose_name='챔피언번호', max_length=3, default='')
     name = models.CharField(verbose_name='챔피언명', max_length=20, default='', help_text='한글로 입력해주세요. ex)가렌')
     lane = models.CharField(verbose_name='라인', max_length=20, default='', help_text='한글로 입력해주세요. ex)탑/미드')
+    keyword = models.CharField(verbose_name="검색키워드", max_length=20, default="")
 
     def __str__(self):
         return f'{self.name}'
